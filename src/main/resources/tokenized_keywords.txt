@@ -1,0 +1,8 @@
+plan use
+product type
+standard variables
+regular cash advanced
+regular purchase
+returned payment fee
+travel reward fee
+overlimit fee

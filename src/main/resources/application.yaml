@@ -1,0 +1,16 @@
+server:
+  port: 9090
+  servlet.context-path: /v1/banker/chatbot
+endpoints:
+  default:
+    enabled: true
+
+logging:
+  level:
+    com.example: DEBUG
+    org.apache.http.impl.conn: debug
+    org.apache.http.wire: debug
+    org.springframework: ERROR
+    org.springframework.web.client.RestTemplate: debug
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} lvl=%p [td=%t] [traceId=%X{traceId}] %-30.30logger{30} : %m%n"

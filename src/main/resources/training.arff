@@ -1,0 +1,28 @@
+@relation chatbot_data
+
+@attribute user_input string
+@attribute intent {display_plan, display_fee, compare_products, ?}
+
+@data
+"What are the available plans?" , display_plan
+"Show me the different plans offered." , display_plan
+"I want to see the plan options." , display_plan
+"What are the fees for your services?" , display_fee
+"Show me the fees." , display_fee
+"Tell me about the costs involved." , display_fee
+"Can you compare Product A and Product B?" , compare_products
+"I'm interested in Product A and Product B. Can you compare them?" , compare_products
+"Compare the features of Product A versus Product B." , compare_products
+"Which product is better, A or B?" , compare_products
+"What are the fees for insurance?" , display_fee
+"Show me the fees for banking." , display_fee
+"I want to see the fees for telecom." , display_fee
+"I need information on insurance plans." , display_plan
+"Could you provide details about banking plans?" , display_plan
+"I'm looking for telecom plan options." , display_plan
+"Tell me about the fees associated with insurance." , display_fee
+"What are the charges for banking services?" , display_fee
+"Show me the costs for telecom." , display_fee
+"Can you compare insurance plans?" , compare_products
+"I'm considering two banking products, could you compare them?" , compare_products
+"Which telecom product offers more features, A or B?" , compare_products
