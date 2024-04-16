@@ -1,28 +1,67 @@
 @relation chatbot_data
 
 @attribute user_input string
-@attribute intent {display_plan, display_fee, compare_products, ?}
+@attribute intent {compare_products, display_products, display_plans, display_plantypes, ?}
 
 @data
-"What are the available plans?" , display_plan
-"Show me the different plans offered." , display_plan
-"I want to see the plan options." , display_plan
-"What are the fees for your services?" , display_fee
-"Show me the fees." , display_fee
-"Tell me about the costs involved." , display_fee
+"compare interest and faes product type of of UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45 versus 6120 of plan 0184" , compare_products
+"compare interest product type of of UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus UAT - product - 7897 - NPSL1 ALT GO P +11.45/45.45 of plan regular cash advanced" , compare_products
+"compare interest and fees and stanrd variables product type of product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456" , compare_products
+"compare plan_use 567583 of product_type 34534 and 345", compare_products
+"compare plan 567583 of product 34534 and 345", compare_products
+"compare plan 567583 and 86855 of product 34534 and 345", compare_products
+"compare product 34534 and 345 of plan 567583", compare_products
+"compare interest plan type product 678 and 456", compare_products
+"compare UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus UAT - product - 8977 - NPSL1 ALT GO P +9.43/23.74", compare_products
+"compare product ABC123 and 456", compare_products
+"give me comparison of product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and 456", compare_products
+"compare product start with UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and 456", compare_products
+"compare fees product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and product 456", compare_products
+"compare interest plan type product ABC123 and 456", compare_products
+"compare product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and 456", compare_products
+"compare plan of cash interest of product 23423 and 454", compare_products
+"compare plan of 343 and 535", compare_products
+"plan compare of 343 versus 678", compare_products
+"product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456", compare_products
+"fees plan type product 678 and 456", compare_products
+"interest and fees plan type product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and 456", compare_products
+"Can you compare interest plans", compare_products
+"Which interest product offers more features A or B", compare_products
+"Compare the features of Product A versus Product B", compare_products
+"Which product is better UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45 or UAT - product - 6120 - NPSL1 ALT GO P +9.45/45.45", compare_products
+"UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456", compare_products
+"What are the available products", display_products
+"Show me the different product offered", display_products
+"I want to see the product options", display_products
+"What are the fees for product ABC?", display_products
+"Show me the fees details of 4564", display_products
+"Tell me about the interest products", display_products
+"I want to see the fees for product 4535", display_products
+"I need information on interest product", display_products
+"Could you provide details about fees plans?", display_products
+"I'm looking for standard variable product options", display_products
+"What are the available plans?" , display_plans
+"Show me the different plan offered." , display_plans
+"I want to see the plan options." , display_plans
+"provide me all plans" , display_plans
+"What are the fees for your product?" , display_products
+"Show me the fees." , display_products
 "Can you compare Product A and Product B?" , compare_products
 "I'm interested in Product A and Product B. Can you compare them?" , compare_products
 "Compare the features of Product A versus Product B." , compare_products
 "Which product is better, A or B?" , compare_products
-"What are the fees for insurance?" , display_fee
-"Show me the fees for banking." , display_fee
-"I want to see the fees for telecom." , display_fee
-"I need information on insurance plans." , display_plan
-"Could you provide details about banking plans?" , display_plan
-"I'm looking for telecom plan options." , display_plan
-"Tell me about the fees associated with insurance." , display_fee
-"What are the charges for banking services?" , display_fee
-"Show me the costs for telecom." , display_fee
-"Can you compare insurance plans?" , compare_products
+"What are the fees for product?" , display_products
+"Show me the fees for product." , display_products
+"I want to see the fees for product of A." , display_products
+"I need information on interest plans." , display_products
+"Could you provide details about banking plans?" , display_plans
+"I'm looking for interest plan options." , display_products
+"Tell me about the fees associated with product." , display_products
+"Can you compare fees plans?" , compare_products
 "I'm considering two banking products, could you compare them?" , compare_products
-"Which telecom product offers more features, A or B?" , compare_products
+"Which banking product offers more features, A or B?" , compare_products
+"What are the available plan types?" , display_plantypes
+"Show me the plan types." , display_plantypes
+"Show me the all products." , display_products
+"provide me details of all plan types", display_plantypes
+"Could you show me details about plan types?", display_plantypes

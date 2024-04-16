@@ -73,12 +73,20 @@ public class GenerateQueryToken {
 
         }
         LOGGER.info("QueryPostModifiedProductName: " + modifiedQuery);
-        return modifiedQuery;
+        return modifiedQuery != null ? modifiedQuery : query;
     }
 
     private List<String> dataReadFromFile(String fileName) {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
         return new BufferedReader(
                 new InputStreamReader(inputStream)).lines().toList();
+    }
+
+    public String removeSpecialCharacter(String query) {
+        String refinedQuery = Arrays.stream(query.split("\\s+"))
+                .map(word -> word.replaceAll("[',()\"]", ""))
+                .collect(Collectors.joining(" "));
+        LOGGER.info("QueryPostRemoveSpecialChar: " + refinedQuery);
+        return refinedQuery;
     }
 }

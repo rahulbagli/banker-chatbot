@@ -32,8 +32,7 @@ public class GenerateResponse {
     ProductValueConverter productValueConverter;
     @Autowired
     FilterProductJson filterProductJson;
-    @Autowired
-    QueryResponse queryResponse;
+    QueryResponse queryResponse = null;
 
     public QueryResponse queryProcessResponse(ProductAndPlan productAndPlan, QueryProductAttributes queryProducts) {
 
@@ -83,15 +82,17 @@ public class GenerateResponse {
             queryResponse.setProductList(productList);
         } else {
             queryResponse.setResponseCode(HttpServletResponse.SC_NO_CONTENT);
-            queryResponse.setResponseText("Sorry! I didn't found any Product. Please mention product name or number");
+            queryResponse.setResponseText("Apologies! I didn't found any Product. Please mention product name or number");
         }
+
+        queryResponse.setQueryIntent("Compare_Product");
         String filteredJson = null;
         try {
             filteredJson = objectMapper.writeValueAsString(queryResponse);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        LOGGER.info("Finaal Response " + filteredJson);
+        LOGGER.info("Final Response " + filteredJson);
         return queryResponse;
     }
 
@@ -107,11 +108,15 @@ public class GenerateResponse {
             List<Map<String, Object>> filteredProducts = filterProductJson.filterProductsByName(productsMap, queryProducts.getConvertProductNameForSearch());
             LOGGER.info("Filtered Products Name  " + objectMapper.writeValueAsString(filteredProducts));
 
-            filteredProducts = filterProductJson.filterPlanTypes(filteredProducts, queryProducts.getConvertPlanTypesUpperCase());
-            LOGGER.info("Filtered PlanType " + objectMapper.writeValueAsString(filteredProducts));
+            if(!queryProducts.getConvertPlanTypesUpperCase().isEmpty()) {
+                filteredProducts = filterProductJson.filterPlanTypes(filteredProducts, queryProducts.getConvertPlanTypesUpperCase());
+                LOGGER.info("Filtered PlanType " + objectMapper.writeValueAsString(filteredProducts));
+            }
 
-            filteredProducts = filterProductJson.filterPlanUses(filteredProducts, queryProducts.getConvertPlanNameForSearch());
-            LOGGER.info("Filtered PlanUse " + objectMapper.writeValueAsString(filteredProducts));
+            if(!queryProducts.getConvertPlanNameForSearch().isEmpty()) {
+                filteredProducts = filterProductJson.filterPlanUses(filteredProducts, queryProducts.getConvertPlanNameForSearch());
+                LOGGER.info("Filtered PlanUse " + objectMapper.writeValueAsString(filteredProducts));
+            }
 
             Map<String, List<Map<String, Object>>> filteredProductsMap = Map.of("productsList", filteredProducts);
 
@@ -135,5 +140,9 @@ public class GenerateResponse {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setQueryResponse(QueryResponse queryResponse) {
+        this.queryResponse = queryResponse;
     }
 }

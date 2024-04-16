@@ -1,30 +1,24 @@
 package com.example.bankerchatbot.configuration;
 
-import com.example.bankerchatbot.model.ProductAndPlan;
-import com.example.bankerchatbot.model.QueryProductAttributes;
-import com.example.bankerchatbot.model.QueryResponse;
-import org.springframework.context.annotation.Bean;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+
+import java.util.Properties;
 
 @Configuration
+@Getter
 public class BankerConfig {
 
-//    @Bean
-//    @Scope("prototype")
-//    public QueryProductAttributes queryProductAttributesBean() {
-//        return new QueryProductAttributes();
-//    }
-//
-//    @Bean
-//    @Scope("prototype")
-//    public ProductAndPlan productAndPlanBean(){
-//        return new ProductAndPlan();
-//    }
+    private StanfordCoreNLP pipeline;
 
-    @Bean
-    @Scope("prototype")
-    public QueryResponse queryResponseBean(){
-        return new QueryResponse();
+    @PostConstruct
+    public void init() {
+        Properties props = new Properties();
+        props.setProperty("ner.useSUTime", "0");
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, depparse, dcoref");
+        props.setProperty("tokenize.whitespace", "true");
+        pipeline = new StanfordCoreNLP(props);
     }
 }

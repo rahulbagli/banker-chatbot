@@ -1,5 +1,7 @@
 package com.example.bankerchatbot.service.impl;
 
+import com.example.bankerchatbot.classification.QueryClassifier;
+import com.example.bankerchatbot.configuration.BankerConfig;
 import com.example.bankerchatbot.model.ProductAndPlan;
 import com.example.bankerchatbot.model.QueryProductAttributes;
 import com.example.bankerchatbot.model.QueryResponse;
@@ -15,6 +17,7 @@ import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import edu.stanford.nlp.util.CoreMap;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.Properties;
 
 @Service
 public class BankerQueryServiceImpl implements BankerQueryService {
@@ -36,25 +38,51 @@ public class BankerQueryServiceImpl implements BankerQueryService {
     DependencyParsing dependencyParsing;
     @Autowired
     DependencyCondition dependencyCondition;
+    @Autowired
+    QueryClassifier queryClassifier;
+    @Autowired
+    BankerConfig bankerConfig;
 
     @Override
     public QueryResponse processQuery(String query) {
-        Properties props = new Properties();
-        props.setProperty("ner.useSUTime", "0");
-        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, depparse, dcoref");
-        props.setProperty("tokenize.whitespace", "true");
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
         ProductAndPlan productAndPlan = new ProductAndPlan();
         QueryProductAttributes queryProductAttributes = new QueryProductAttributes();
-        LOGGER.info("Query product: "+queryProductAttributes.getProductName().size());
+
         dependencyCondition.setRequiredFields(productAndPlan, queryProductAttributes);
-        extractionLogic(pipeline, query);
-        return generateResponse.queryProcessResponse(productAndPlan, queryProductAttributes);
+        String queryPostSpecialCharacter = generateQueryToken.removeSpecialCharacter(query);
+        String queryPostStopWords = generateQueryToken.stopWords(queryPostSpecialCharacter);
+        String classIntent = queryClassifier.fetchQueryIntent(queryPostStopWords);
+        LOGGER.info("Class Intent "+classIntent);
+
+        QueryResponse queryResponse = new QueryResponse();
+        processQueryWithClassIntent(classIntent, productAndPlan, queryResponse, queryPostStopWords
+                , queryProductAttributes);
+
+        return queryResponse;
     }
 
-    private void extractionLogic(StanfordCoreNLP pipeline, String query) {
+    private void processQueryWithClassIntent(String classIntent, ProductAndPlan productAndPlan,
+                                             QueryResponse queryResponse, String queryPostStopWords,
+                                             QueryProductAttributes queryProductAttributes) {
+        switch (classIntent){
+            case "compare_products": extractionLogic(bankerConfig.getPipeline(), queryPostStopWords, queryResponse,
+                    productAndPlan, queryProductAttributes);
+            break;
+            case "display_products": displayProducts(productAndPlan, queryResponse);
+            break;
+            case "display_plans": displayPlans(productAndPlan, queryResponse);
+            break;
+            case "display_plantypes": displayPlanTypes(productAndPlan, queryResponse);
+            break;
+            case "?": noIntentMatched(queryResponse);
+            break;
+        }
+    }
 
-        String queryPostStopWords = generateQueryToken.stopWords(query);
+    private void extractionLogic(StanfordCoreNLP pipeline, String queryPostStopWords, QueryResponse queryResponse,
+                                 ProductAndPlan productAndPlan, QueryProductAttributes queryProductAttributes) {
+
         String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords);
         String queryPostCheckingSpelling = generateQueryToken.checkSpelling(queryPostModifiedProductName);
         String queryWithJoinWords = generateQueryToken.convertJoinKeyWordsQuery(queryPostCheckingSpelling);
@@ -69,6 +97,9 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         for (SemanticGraphEdge dependency : dependencies.edgeListSorted()) {
             extractIncomingEdgeAndSetAttribute(dependency);
         }
+        generateResponse.setQueryResponse(queryResponse);
+        queryResponse.setQueryIntent("Products");
+        generateResponse.queryProcessResponse(productAndPlan, queryProductAttributes);
     }
 
     private void extractIncomingEdgeAndSetAttribute(SemanticGraphEdge dependency) {
@@ -92,5 +123,32 @@ public class BankerQueryServiceImpl implements BankerQueryService {
             case "vmod": dependencyParsing.parseVmodDependency(dependency); break;
             default : dependencyParsing.notFoundDependency();
         }
+    }
+
+    private void noIntentMatched(QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_NO_CONTENT);
+        queryResponse.setQueryIntent("No_Intent");
+        queryResponse.setResponseText("Apologies! I didn't understood your Query");
+    }
+
+    private void displayPlanTypes(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Display_PlanType");
+        queryResponse.setPlanTypes(productAndPlan.getPlanTypes());
+        queryResponse.setResponseText("Certainly! Here is the details of Plan Types");
+    }
+
+    private void displayPlans(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Display_Plans");
+        queryResponse.setPlanNameWithNumber(productAndPlan.getPlanNameWithNumber());
+        queryResponse.setResponseText("Sure! Below are the details of Plans");
+    }
+
+    private void displayProducts(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Display_Products");
+        queryResponse.setProductName(productAndPlan.getProductName());
+        queryResponse.setResponseText("Okay! Showing products of your query");
     }
 }

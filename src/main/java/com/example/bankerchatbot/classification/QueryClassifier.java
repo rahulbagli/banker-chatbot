@@ -2,6 +2,7 @@ package com.example.bankerchatbot.classification;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -10,17 +11,23 @@ import weka.core.converters.ConverterUtils;
 
 import java.lang.invoke.MethodHandles;
 
+@Component
 public class QueryClassifier {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void main(String args[]) throws Exception {
-        String testQuery = "Compare the features of Product UAT-234+9.11/345 versus Product UAT-6755+11.11/345";
+    public String fetchQueryIntent(String query) {
         QueryClassifier queryClassifier = new QueryClassifier();
         PredictedQueryClassify predictedQueryClassify = new PredictedQueryClassify();
-        Instances trainDataSetInstance = queryClassifier.loadModal();
-        Classifier classifier = queryClassifier.getClassifier();
-        Instances instance = queryClassifier.evaluateTrainingInstance(trainDataSetInstance, classifier, predictedQueryClassify);
-        String predictedQueryClass = predictedQueryClassify.predictedQueryClassify(testQuery, instance, trainDataSetInstance, classifier);
+        String classIntent = null;
+        try {
+            Instances trainDataSetInstance = queryClassifier.loadModal();
+            Classifier classifier = queryClassifier.getClassifier();
+            Instances instance = queryClassifier.evaluateTrainingInstance(trainDataSetInstance, classifier, predictedQueryClassify);
+            classIntent = predictedQueryClassify.predictedQueryClassify(query, instance, trainDataSetInstance, classifier);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return classIntent;
     }
 
     private Instances loadModal() throws Exception {
@@ -44,14 +51,10 @@ public class QueryClassifier {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LOGGER.info(printClassifierAndEvaluation(classifier, evaluation) + "\n");
+      //  LOGGER.info(printClassifierAndEvaluation(classifier, evaluation) + "\n");
         return instance;
     }
 
-
-
-
-    // information about classifier and evaluation
     private StringBuffer printClassifierAndEvaluation(Classifier thisClassifier, Evaluation thisEvaluation) {
         StringBuffer result = new StringBuffer();
         try {

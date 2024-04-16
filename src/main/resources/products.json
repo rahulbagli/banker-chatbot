@@ -139,9 +139,9 @@
               "planUse": "STANDARD VARIABLES (0182)",
               "data": {
                 "planProduct": "CON 24 STG (0037)",
-                "param1": "ACTIVE",
+                "param1": 7,
                 "param2": "CONSUMER",
-                "param3": 5
+                "param3": "ACTIVE"
               }
             }
           ]
