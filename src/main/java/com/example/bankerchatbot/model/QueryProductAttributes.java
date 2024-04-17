@@ -24,7 +24,7 @@ public class QueryProductAttributes {
     private Set<String> convertPlanNameForSearch = null;
     private Set<String> convertProductNumberForSearch = null;
     private Set<String> convertProductNameForSearch = null;
-    private Set<String> convertPlanTypesUpperCase = new HashSet<>();
+    private Set<String> convertPlanType = null;
 
     private ProductAndPlan productAndPlan;
 }

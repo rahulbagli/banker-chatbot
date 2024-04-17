@@ -56,9 +56,9 @@ public class ProductValueConverter {
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> convertPlanTypeToUpperCase(QueryProductAttributes queryProducts) {
+    public Set<String> convertPlanType(QueryProductAttributes queryProducts) {
         return queryProducts.getPlanTypes().stream()
-                .map(plan -> plan.toUpperCase())
+                .map(plan -> plan.toUpperCase().replace("_", " "))
                 .collect(Collectors.toSet());
     }
 }

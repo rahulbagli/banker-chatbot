@@ -56,6 +56,7 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         LOGGER.info("Class Intent "+classIntent);
 
         QueryResponse queryResponse = new QueryResponse();
+        queryResponse.setQueryIntent(classIntent);
         processQueryWithClassIntent(classIntent, productAndPlan, queryResponse, queryPostStopWords
                 , queryProductAttributes);
 
@@ -69,6 +70,9 @@ public class BankerQueryServiceImpl implements BankerQueryService {
             case "compare_products": extractionLogic(bankerConfig.getPipeline(), queryPostStopWords, queryResponse,
                     productAndPlan, queryProductAttributes);
             break;
+            case "product_details": extractionLogic(bankerConfig.getPipeline(), queryPostStopWords, queryResponse,
+                    productAndPlan, queryProductAttributes);
+                break;
             case "display_products": displayProducts(productAndPlan, queryResponse);
             break;
             case "display_plans": displayPlans(productAndPlan, queryResponse);
@@ -98,7 +102,6 @@ public class BankerQueryServiceImpl implements BankerQueryService {
             extractIncomingEdgeAndSetAttribute(dependency);
         }
         generateResponse.setQueryResponse(queryResponse);
-        queryResponse.setQueryIntent("Products");
         generateResponse.queryProcessResponse(productAndPlan, queryProductAttributes);
     }
 

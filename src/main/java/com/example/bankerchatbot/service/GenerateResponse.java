@@ -49,7 +49,8 @@ public class GenerateResponse {
         LOGGER.info("Total Plan Type " + productAndPlan.getPlanTypes());
         LOGGER.info("Total Plan Number with Number " + productAndPlan.getPlanNameWithNumber());
 
-        queryProducts.setConvertPlanTypesUpperCase(productValueConverter.convertPlanTypeToUpperCase(queryProducts));
+        queryProducts.setConvertPlanType(productValueConverter.convertPlanType(queryProducts));
+        LOGGER.info("Convert Plan Type " + queryProducts.getConvertPlanType());
 
         queryProducts.setConvertProductNameForSearch(productValueConverter.convertProductName(queryProducts));
         LOGGER.info("Convert Product Name " + queryProducts.getConvertProductNameForSearch());
@@ -65,17 +66,26 @@ public class GenerateResponse {
 
         int productLength = queryProducts.getProductNumber().size() + queryProducts.getProductName().size();
 
-        if (productLength == 1) {
+        if(productLength == 1 && queryResponse.getQueryIntent().equals("product_details")){
+            queryResponse.setResponseCode(HttpServletResponse.SC_PARTIAL_CONTENT);
+            queryResponse.setResponseText("Sure! I can show you the details of product");
+            queryResponse.setQueryIntent("Product_Detail");
+            ProductList productList = fetchProductDetails(queryProducts);
+            queryResponse.setProductList(productList);
+        } else if (productLength == 1) {
+            queryResponse.setQueryIntent("Compare_Product");
             queryResponse.setResponseCode(HttpServletResponse.SC_PARTIAL_CONTENT);
             queryResponse.setResponseText("Sorry! I can't compare product with only one products. But I can show you the detail of One");
             ProductList productList = fetchProductDetails(queryProducts);
             queryResponse.setProductList(productList);
         } else if (productLength == 2) {
+            queryResponse.setQueryIntent("Compare_Product");
             queryResponse.setResponseCode(HttpServletResponse.SC_OK);
             queryResponse.setResponseText("Sure! Here is the comparison of Products");
             ProductList productList = fetchProductDetails(queryProducts);
             queryResponse.setProductList(productList);
         } else if (productLength >= 3) {
+            queryResponse.setQueryIntent("Compare_Product");
             queryResponse.setResponseCode(HttpServletResponse.SC_PARTIAL_CONTENT);
             queryResponse.setResponseText("Apologies! I can't compare more than 2 products. But I can show you the details of all product asked by you");
             ProductList productList = fetchProductDetails(queryProducts);
@@ -85,7 +95,6 @@ public class GenerateResponse {
             queryResponse.setResponseText("Apologies! I didn't found any Product. Please mention product name or number");
         }
 
-        queryResponse.setQueryIntent("Compare_Product");
         String filteredJson = null;
         try {
             filteredJson = objectMapper.writeValueAsString(queryResponse);
@@ -108,8 +117,8 @@ public class GenerateResponse {
             List<Map<String, Object>> filteredProducts = filterProductJson.filterProductsByName(productsMap, queryProducts.getConvertProductNameForSearch());
             LOGGER.info("Filtered Products Name  " + objectMapper.writeValueAsString(filteredProducts));
 
-            if(!queryProducts.getConvertPlanTypesUpperCase().isEmpty()) {
-                filteredProducts = filterProductJson.filterPlanTypes(filteredProducts, queryProducts.getConvertPlanTypesUpperCase());
+            if(!queryProducts.getConvertPlanType().isEmpty()) {
+                filteredProducts = filterProductJson.filterPlanTypes(filteredProducts, queryProducts.getConvertPlanType());
                 LOGGER.info("Filtered PlanType " + objectMapper.writeValueAsString(filteredProducts));
             }
 
