@@ -87,7 +87,8 @@ public class BankerQueryServiceImpl implements BankerQueryService {
     private void extractionLogic(StanfordCoreNLP pipeline, String queryPostStopWords, QueryResponse queryResponse,
                                  ProductAndPlan productAndPlan, QueryProductAttributes queryProductAttributes) {
 
-        String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords);
+        String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords, queryProductAttributes);
+
         String queryPostCheckingSpelling = generateQueryToken.checkSpelling(queryPostModifiedProductName);
         String queryWithJoinWords = generateQueryToken.convertJoinKeyWordsQuery(queryPostCheckingSpelling);
 
@@ -111,6 +112,7 @@ public class BankerQueryServiceImpl implements BankerQueryService {
 
             case "nn": dependencyParsing.parseNNDependency(dependency); break;
             case "num": dependencyParsing.parseNumDependency(dependency); break;
+            case "cc": dependencyParsing.parseCCDependency(dependency); break;
             case "iobj": dependencyParsing.parseIObjDependency(dependency); break;
             case "dobj": dependencyParsing.parseDObjDependency(dependency); break;
             case "conj_and": dependencyParsing.parseConjAndDependency(dependency); break;
@@ -122,6 +124,8 @@ public class BankerQueryServiceImpl implements BankerQueryService {
             case "amod": dependencyParsing.parseAmodDependency(dependency); break;
             case "det": dependencyParsing.parseDetDependency(dependency); break;
             case "cop": dependencyParsing.parseCOPDependency(dependency); break;
+            case "number": dependencyParsing.parseNumberDependency(dependency); break;
+            case "quantmod": dependencyParsing.parseQuantModDependency(dependency); break;
             case "prep_for": dependencyParsing.parsePrepForDependency(dependency); break;
             case "vmod": dependencyParsing.parseVmodDependency(dependency); break;
             default : dependencyParsing.notFoundDependency();

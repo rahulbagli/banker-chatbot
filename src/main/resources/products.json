@@ -1,7 +1,7 @@
 {
   "productsList": [
     {
-      "product": "UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 5168 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -75,7 +75,7 @@
       ]
     },
     {
-      "product": "UAT - product - 6120 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 6120 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "product": "UAT - product - 6878 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 6878 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -213,9 +213,18 @@
               "planUse": "STANDARD VARIABLES (0182)",
               "data": {
                 "planProduct": "CON 24 STG (0037)",
-                "param1": "ACTIVE",
+                "param1": 9,
                 "param2": "CONSUMER",
-                "param3": 5
+                "param3": "ACTIVE"
+              }
+            },
+            {
+              "planUse": "SHOPPING (0120)",
+              "data": {
+                "planProduct": "CON 24 STG (0037)",
+                "param1": 9,
+                "param2": "CONSUMER",
+                "param3": "ACTIVE"
               }
             }
           ]
@@ -223,7 +232,7 @@
       ]
     },
     {
-      "product": "UAT - product - 4456 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 4456 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -283,7 +292,7 @@
       ]
     },
     {
-      "product": "UAT - product - 7897 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 7897 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -343,7 +352,7 @@
       ]
     },
     {
-      "product": "UAT - product - 5655 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 5655 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -403,7 +412,7 @@
       ]
     },
     {
-      "product": "UAT - product - 4560 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 4560 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -463,7 +472,7 @@
       ]
     },
     {
-      "product": "UAT - product - 8887 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 8887 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",
@@ -523,7 +532,7 @@
       ]
     },
     {
-      "product": "UAT - product - 6711 - NPSL1 ALT GO P +11.45/45.45",
+      "product": "UAT - PRODUCT - 6711 - NPSL1 ALT GO P +11.45/45.45",
       "planTypeList": [
         {
           "planType": "INTEREST",

@@ -26,7 +26,8 @@ import java.util.Map;
 @Component
 public class GenerateResponse {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     ProductValueConverter productValueConverter;
@@ -49,6 +50,11 @@ public class GenerateResponse {
         LOGGER.info("Total Plan Type " + productAndPlan.getPlanTypes());
         LOGGER.info("Total Plan Number with Number " + productAndPlan.getPlanNameWithNumber());
 
+        ProductList productListFromJson = productValueConverter.convertJsonToProduct();
+        LOGGER.info("ProductList From Json Size: " + productListFromJson.getProductsList().size());
+        List<String> allProductList = productValueConverter.generateAllProductList(productListFromJson);
+        productValueConverter.checkAndValidateAllQueryFields(queryProducts, productAndPlan, allProductList);
+
         queryProducts.setConvertPlanType(productValueConverter.convertPlanType(queryProducts));
         LOGGER.info("Convert Plan Type " + queryProducts.getConvertPlanType());
 
@@ -64,7 +70,7 @@ public class GenerateResponse {
         queryProducts.setConvertPlanNumberForSearch(productValueConverter.convertPlanNumber(queryProducts, productAndPlan));
         LOGGER.info("Convert Plan Number " + queryProducts.getConvertPlanNumberForSearch());
 
-        int productLength = queryProducts.getProductNumber().size() + queryProducts.getProductName().size();
+        int productLength = queryProducts.getConvertProductNumberForSearch().size() + queryProducts.getConvertProductNameForSearch().size();
 
         if(productLength == 1 && queryResponse.getQueryIntent().equals("product_details")){
             queryResponse.setResponseCode(HttpServletResponse.SC_PARTIAL_CONTENT);
@@ -104,7 +110,6 @@ public class GenerateResponse {
         LOGGER.info("Final Response " + filteredJson);
         return queryResponse;
     }
-
 
     private ProductList fetchProductDetails(QueryProductAttributes queryProducts) {
 
@@ -150,6 +155,8 @@ public class GenerateResponse {
         }
         return null;
     }
+
+
 
     public void setQueryResponse(QueryResponse queryResponse) {
         this.queryResponse = queryResponse;

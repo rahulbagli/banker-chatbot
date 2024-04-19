@@ -9,6 +9,7 @@
 "compare interest and fees and stanrd variables product type of product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456" , compare_products
 "compare plan_use 567583 of product_type 34534 and 345", compare_products
 "compare plan 567583 of product 34534 and 345", compare_products
+"365 versus 665", , compare_products
 "compare plan 567583 and 86855 of product 34534 and 345", compare_products
 "compare product 34534 and 345 of plan 567583", compare_products
 "compare interest plan type product 678 and 456", compare_products

@@ -1,5 +1,6 @@
 package com.example.bankerchatbot.utility;
 
+import com.example.bankerchatbot.model.QueryProductAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -52,13 +53,14 @@ public class GenerateQueryToken {
         return refinedQuery;
     }
 
-    public String modifyProductName(String query) {
+    public String modifyProductName(String query, QueryProductAttributes queryProductAttributes) {
         String patternString = "UAT.*?\\d+\\.\\d+/\\d+\\.\\d+";
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(query);
         Map<String, String> productMap = new HashMap<>();
         while (matcher.find()) {
             LOGGER.info("Product Name Found: " + matcher.group());
+            queryProductAttributes.getProductName().add(matcher.group());
             String removeHyphenProductName = matcher.group().replaceAll("\\s*-\\s*", "-");
             String removeSpaceProductName = removeHyphenProductName.replaceAll(" ", "_");
             productMap.put(removeSpaceProductName, matcher.group());

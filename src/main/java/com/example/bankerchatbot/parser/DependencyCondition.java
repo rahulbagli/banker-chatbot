@@ -25,7 +25,7 @@ public class DependencyCondition {
     private static List<String> keyWordsProduct = null;
 
     QueryProductAttributes queryProductAttributes;
-    String conditionType = null;
+    String conditionType = "";
 
     @Autowired
     ExtractProductValue extractProductValue;
@@ -36,13 +36,13 @@ public class DependencyCondition {
         Matcher productNameTargetMatcher = productNamePattern.matcher(indexedWord.word());
 
         if (knownPlanTypes.contains(indexedWord.word())) {
-            queryProductAttributes.getPlanTypes().add(indexedWord.word());
+            queryProductAttributes.getPlanTypes().add(indexedWord.word().toUpperCase());
             conditionType = "comparePlan";
         } else if (knownPlanUse.contains(indexedWord.word())) {
-            queryProductAttributes.getPlanName().add(indexedWord.word());
+            queryProductAttributes.getPlanName().add(indexedWord.word().toUpperCase());
             conditionType = "comparePlan";
         } else if (productNameTargetMatcher.find()) {
-            queryProductAttributes.getProductName().add(productNameTargetMatcher.group());
+            queryProductAttributes.getProductName().add(productNameTargetMatcher.group().toUpperCase());
             conditionType = "compareProduct";
         } else if (keyWordsProductType.contains(indexedWord.word())) {
             conditionType = "productType";
@@ -57,6 +57,8 @@ public class DependencyCondition {
             } else if (conditionType.equals("planUse") || conditionType.equals("comparePlan")) {
                 queryProductAttributes.getPlanNumber().add(indexedWord.word());
                 conditionType = "comparePlan";
+            }else{
+                queryProductAttributes.getPlanNumber().add(indexedWord.word());
             }
         } else {
             LOGGER.info("No target matched for " + indexedWord.word());

@@ -80,4 +80,19 @@ public class DependencyParsing {
         conditionType = dependencyCondition.checkDependency(dependency.getSource());
         conditionType = dependencyCondition.checkDependency(dependency.getTarget());
     }
+
+    public void parseCCDependency(SemanticGraphEdge dependency) {
+        conditionType = dependencyCondition.checkDependency(dependency.getSource());
+        conditionType = dependencyCondition.checkDependency(dependency.getTarget());
+    }
+
+    public void parseQuantModDependency(SemanticGraphEdge dependency) {
+        conditionType = dependencyCondition.checkDependency(dependency.getSource());
+        conditionType = dependencyCondition.checkDependency(dependency.getTarget());
+    }
+
+    public void parseNumberDependency(SemanticGraphEdge dependency) {
+        conditionType = dependencyCondition.checkDependency(dependency.getSource());
+        conditionType = dependencyCondition.checkDependency(dependency.getTarget());
+    }
 }

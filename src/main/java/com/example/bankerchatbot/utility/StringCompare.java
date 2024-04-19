@@ -64,7 +64,7 @@ public class StringCompare {
                 mostSimilarWord = correctWord;
             }
         }
-        LOGGER.info("Most Similar Word: "+mostSimilarWord);
+        LOGGER.debug("Most Similar Word: "+mostSimilarWord);
         return mostSimilarWord;
     }
 }

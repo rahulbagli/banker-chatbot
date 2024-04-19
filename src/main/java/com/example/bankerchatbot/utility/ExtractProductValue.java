@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class ExtractProductValue {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public List<String> joinPlanUseString(ProductAndPlan productAndPlan) {
         List<String> joinWords = productAndPlan.getPlanName();
@@ -97,7 +100,6 @@ public class ExtractProductValue {
     }
 
     private Map<String, List<Map<String, Object>>> parseProductMap() {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             Resource resource = new ClassPathResource("products.json");
             File file = resource.getFile();

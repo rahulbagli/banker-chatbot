@@ -1,8 +1,10 @@
 package com.example.bankerchatbot.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
@@ -20,5 +22,10 @@ public class BankerConfig {
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, depparse, dcoref");
         props.setProperty("tokenize.whitespace", "true");
         pipeline = new StanfordCoreNLP(props);
+    }
+
+    @Bean
+    public ObjectMapper getObjectMapper(){
+        return new ObjectMapper();
     }
 }
