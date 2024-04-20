@@ -52,27 +52,27 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         dependencyCondition.setRequiredFields(productAndPlan, queryProductAttributes);
         String queryPostSpecialCharacter = generateQueryToken.removeSpecialCharacter(query);
         String queryPostStopWords = generateQueryToken.stopWords(queryPostSpecialCharacter);
-        String classIntent = queryClassifier.fetchQueryIntent(queryPostStopWords);
+        String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords, queryProductAttributes);
+        String classIntent = queryClassifier.fetchQueryIntent(queryPostModifiedProductName);
         LOGGER.info("Class Intent "+classIntent);
 
         QueryResponse queryResponse = new QueryResponse();
         queryResponse.setQueryIntent(classIntent);
-        processQueryWithClassIntent(classIntent, productAndPlan, queryResponse, queryPostStopWords
+        processQueryWithClassIntent(classIntent, productAndPlan, queryResponse, queryPostModifiedProductName
                 , queryProductAttributes);
 
         return queryResponse;
     }
 
     private void processQueryWithClassIntent(String classIntent, ProductAndPlan productAndPlan,
-                                             QueryResponse queryResponse, String queryPostStopWords,
+                                             QueryResponse queryResponse, String queryPostModifiedProductName,
                                              QueryProductAttributes queryProductAttributes) {
         switch (classIntent){
-            case "compare_products": extractionLogic(bankerConfig.getPipeline(), queryPostStopWords, queryResponse,
+            case "compare_products":
+            case "product_details":
+                extractionLogic(bankerConfig.getPipeline(), queryPostModifiedProductName, queryResponse,
                     productAndPlan, queryProductAttributes);
             break;
-            case "product_details": extractionLogic(bankerConfig.getPipeline(), queryPostStopWords, queryResponse,
-                    productAndPlan, queryProductAttributes);
-                break;
             case "display_products": displayProducts(productAndPlan, queryResponse);
             break;
             case "display_plans": displayPlans(productAndPlan, queryResponse);
@@ -84,10 +84,8 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         }
     }
 
-    private void extractionLogic(StanfordCoreNLP pipeline, String queryPostStopWords, QueryResponse queryResponse,
+    private void extractionLogic(StanfordCoreNLP pipeline, String queryPostModifiedProductName, QueryResponse queryResponse,
                                  ProductAndPlan productAndPlan, QueryProductAttributes queryProductAttributes) {
-
-        String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords, queryProductAttributes);
 
         String queryPostCheckingSpelling = generateQueryToken.checkSpelling(queryPostModifiedProductName);
         String queryWithJoinWords = generateQueryToken.convertJoinKeyWordsQuery(queryPostCheckingSpelling);

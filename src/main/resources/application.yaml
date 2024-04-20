@@ -13,4 +13,4 @@ logging:
     org.springframework: ERROR
     org.springframework.web.client.RestTemplate: debug
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} lvl=%p [td=%t] [traceId=%X{traceId}] %-30.30logger{30} : %m%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} lvl=%p [td=%t] %-30.30logger{30} : %m%n"

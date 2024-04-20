@@ -1,7 +1,7 @@
 standard
 variables
-products
-plans
+product
+plan
 use
 compare
 start

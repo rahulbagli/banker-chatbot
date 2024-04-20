@@ -9,11 +9,11 @@
 "compare interest and fees and stanrd variables product type of product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456" , compare_products
 "compare plan_use 567583 of product_type 34534 and 345", compare_products
 "compare plan 567583 of product 34534 and 345", compare_products
-"365 versus 665", , compare_products
+"365 versus 665", compare_products
+"UAT - product - 5168-NPSL1 ALT GO P +11.45/4545 versus 456", compare_products
 "compare plan 567583 and 86855 of product 34534 and 345", compare_products
 "compare product 34534 and 345 of plan 567583", compare_products
 "compare interest plan type product 678 and 456", compare_products
-"can you give me details of 5168 products", product_details
 "compare UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus UAT - product - 8977 - NPSL1 ALT GO P +9.43/23.74", compare_products
 "compare product ABC123 and 456", compare_products
 "give me comparison of product UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 and 456", compare_products
@@ -32,38 +32,46 @@
 "Compare the features of Product A versus Product B", compare_products
 "Which product is better UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45 or UAT - product - 6120 - NPSL1 ALT GO P +9.45/45.45", compare_products
 "UAT - product - 5168-NPSL1 ALT GO P +11.45/45.45 versus 456", compare_products
-"What are the available products", display_products
-"Show me the different product offered", display_products
-"I want to see the product options", product_details
-"What are the fees for product ABC?", product_details
-"Show me the fees details of 4564", product_details
-"Tell me about the interest products", display_products
-"I want to see the fees for product 4535", product_details
-"I need information on interest product", display_products
-"Could you provide details about fees plans?", display_products
-"I'm looking for standard variable product options", display_products
-"What are the available plans?" , display_plans
-"Show me the different plan offered." , display_plans
-"I want to see the plan options." , display_plans
-"provide me all plans" , display_plans
-"What are the fees for your product?" , display_products
-"Show me the fees." , display_products
 "Can you compare Product A and Product B?" , compare_products
 "I'm interested in Product A and Product B. Can you compare them?" , compare_products
 "Compare the features of Product A versus Product B." , compare_products
 "Which product is better, A or B?" , compare_products
-"What are the fees for product?" , display_products
-"Show me the fees for product." , display_products
-"I want to see the fees for product of A." , product_details
-"I need information on interest plans." , display_products
-"Could you provide details about banking plans?" , display_plans
-"I'm looking for interest plan options." , display_products
-"Tell me about the fees associated with product." , display_products
 "Can you compare fees plans?" , compare_products
 "I'm considering two banking products, could you compare them?" , compare_products
 "Which banking product offers more features, A or B?" , compare_products
+"can you give me details of 5168 products", product_details
+"I want to see the product options", product_details
+"What are the fees for product ABC?", product_details
+"Show me the fees details of 4564", product_details
+"I want to see the fees for product 4535", product_details
+"I want to see the fees for product of A." , product_details
+"provide me detail of UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45", product_details
+"What are the available products", display_products
+"Show me the different product offered", display_products
+"Tell me about the interest products", display_products
+"I need information on interest product", display_products
+"Could you provide details about fees plans?", display_products
+"I'm looking for standard variable product options", display_products
+"What are the fees for your product?" , display_products
+"Show me the fees." , display_products
+"What are the fees for product?" , display_products
+"Show me the fees for product." , display_products
+"I need information on interest plans." , display_products
+"I'm looking for interest plan options." , display_products
+"Tell me about the fees associated with product." , display_products
+"Show me the all products." , display_products
+"What are the available plans?" , display_plans
+"Show me the different plan offered." , display_plans
+"share information of plan" ,display_plans
+"looking for all plan options" , display_plans
+"I want to see the plan options." , display_plans
+"provide me all plans" , display_plans
+"Could you provide details about banking plans?" , display_plans
 "What are the available plan types?" , display_plantypes
 "Show me the plan types." , display_plantypes
-"Show me the all products." , display_products
 "provide me details of all plan types", display_plantypes
 "Could you show me details about plan types?", display_plantypes
+"share the info of plan types" , display_plantypes
+"provide information of plan types" , display_plantypes
+"provide details of plan types", display_plantypes
+"Could you show details about plan types", display_plantypes

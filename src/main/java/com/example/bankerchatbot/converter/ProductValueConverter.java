@@ -38,7 +38,7 @@ public class ProductValueConverter {
             for (String otherItem : productAndPlan.getPlanNameWithNumber()) {
                 String[] str = otherItem.split("-");
                 if (item.equals(str[1])) {
-                    matches.add(str[0]+" ("+str[1]+")");
+                    matches.add(str[0] + " (" + str[1] + ")");
                 }
             }
         }
@@ -57,13 +57,14 @@ public class ProductValueConverter {
         }
         return matches;
     }
+
     public Set<String> convertPlanName(QueryProductAttributes queryProducts, ProductAndPlan productAndPlan) {
         Set<String> matches = new HashSet<>();
         for (String item : queryProducts.getPlanName()) {
             for (String otherItem : productAndPlan.getPlanNameWithNumber()) {
                 String[] str = otherItem.split("-");
-                if (item.replace("_"," ").toUpperCase().equals(str[0])) {
-                    matches.add(str[0]+" ("+str[1]+")");
+                if (item.replace("_", " ").toUpperCase().equals(str[0])) {
+                    matches.add(str[0] + " (" + str[1] + ")");
                 }
             }
         }
@@ -73,7 +74,7 @@ public class ProductValueConverter {
 
     public Set<String> convertProductName(QueryProductAttributes queryProducts) {
         return queryProducts.getProductName().stream()
-                .map(product -> product.replace(" - ","-").replace("-", " - ").replace("_", " "))
+                .map(product -> product.replace(" - ", "-").replace("-", " - ").replace("_", " "))
                 .collect(Collectors.toSet());
     }
 
@@ -99,7 +100,6 @@ public class ProductValueConverter {
                 queryProducts.getProductNumber().addAll(matchedProductNumber);
                 checkPlanNumber(queryProducts, productList);
             }
-
         }
 
         if (!queryProducts.getProductNumber().isEmpty()) {
@@ -172,17 +172,17 @@ public class ProductValueConverter {
     }
 
     private void checkPlanNumber(QueryProductAttributes queryProducts, List<String> productList) {
-        for (String product : productList){
+        for (String product : productList) {
             String[] productArray = product.split("-#");
             String productNumber = productArray[0];
             LOGGER.debug("ProductNumber: " + productNumber);
             String[] planTypeArray = productArray[1].split("#");
-            for (int i = 0; i <= planTypeArray.length-1; i++) {
+            for (int i = 0; i <= planTypeArray.length - 1; i++) {
                 String[] planNumber = planTypeArray[i].split("\\|");
                 LOGGER.debug("PlanType: " + planNumber[0]);
-                for (int j = 1; j <= planNumber.length-1; j++) {
+                for (int j = 1; j <= planNumber.length - 1; j++) {
                     LOGGER.debug("Plan Number: " + planNumber[j]);
-                    if(queryProducts.getPlanNumber().contains(planNumber[j]) && queryProducts.getProductNumber().contains(productNumber)){
+                    if (queryProducts.getPlanNumber().contains(planNumber[j])) {
                         queryProducts.getPlanTypes().add(planNumber[0]);
                     }
                 }
@@ -195,7 +195,7 @@ public class ProductValueConverter {
             Resource resource = new ClassPathResource("products.json");
             File file = resource.getFile();
             return objectMapper.readValue(file, new TypeReference<ProductList>() {
-            } );
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,26 +205,65 @@ public class ProductValueConverter {
     public List<String> generateAllProductList(ProductList productListFromJson) {
         StringBuilder stringBuilder = null;
         List<String> productList = new ArrayList<>();
-        for(Product product : productListFromJson.getProductsList()){
+        for (Product product : productListFromJson.getProductsList()) {
             stringBuilder = new StringBuilder();
             stringBuilder.append(product.getProduct().split(" ")[4]);
             stringBuilder.append("-");
-            for(PlanType planType : product.getPlanTypeList()){
+            for (PlanType planType : product.getPlanTypeList()) {
                 stringBuilder.append("#");
                 stringBuilder.append(planType.getPlanType());
-                for (PlanUse planUse : planType.getPlanUseList()){
+                for (PlanUse planUse : planType.getPlanUseList()) {
                     stringBuilder.append("|");
-                    stringBuilder.append(planUse.getPlanUse().split(" \\(")[1].replace(")",""));
+                    stringBuilder.append(planUse.getPlanUse().split(" \\(")[1].replace(")", ""));
 
                 }
             }
             productList.add(stringBuilder.toString());
         }
         try {
-            LOGGER.info("productList "+objectMapper.writeValueAsString(productList));
+            LOGGER.info("productList " + objectMapper.writeValueAsString(productList));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         return productList;
+    }
+
+    public void checkUnMatchedValues(QueryProductAttributes queryProducts, ProductAndPlan productAndPlan) {
+        Set<String> notMatchedPlanNumber = null;
+        Set<String> notMatchedProductNumber = null;
+        if (!queryProducts.getPlanNumber().isEmpty()) {
+            notMatchedPlanNumber = queryProducts.getPlanNumber().stream()
+                    .filter(plan -> !productAndPlan.getPlanNumber().contains(plan))
+                    .collect(Collectors.toSet());
+        }
+        if (!queryProducts.getProductNumber().isEmpty()) {
+            notMatchedProductNumber = queryProducts.getProductNumber().stream()
+                    .filter(plan -> !productAndPlan.getProductNumber().contains(plan))
+                    .collect(Collectors.toSet());
+        }
+        if (null != notMatchedPlanNumber) {
+            Set<String> notMatchedNumber = notMatchedPlanNumber.stream()
+                    .filter(product -> !productAndPlan.getProductNumber().contains(product))
+                    .collect(Collectors.toSet());
+            queryProducts.setUnMatchedNumber(notMatchedNumber);
+        }
+
+        if (null != notMatchedProductNumber) {
+            Set<String> notMatchedNumber = notMatchedProductNumber.stream()
+                    .filter(product -> !productAndPlan.getPlanNumber().contains(product))
+                    .collect(Collectors.toSet());
+            if (queryProducts.getUnMatchedNumber() != null) {
+                queryProducts.getUnMatchedNumber().addAll(notMatchedNumber);
+            } else {
+                queryProducts.setUnMatchedNumber(notMatchedNumber);
+            }
+        }
+
+        if (!queryProducts.getProductName().isEmpty()) {
+            Set<String> notMatchedProductName = queryProducts.getProductName().stream()
+                    .filter(product -> !productAndPlan.getProductName().contains(product.replace("-", " - ").replace("_", " ")))
+                    .collect(Collectors.toSet());
+            queryProducts.setUnMatchedProductName(notMatchedProductName);
+        }
     }
 }

@@ -39,11 +39,6 @@ public class GenerateQueryToken {
         return refinedQuery;
     }
 
-
-    public List<String> fetchTestQueries() {
-        return dataReadFromFile("testQueries.txt");
-    }
-
     public String checkSpelling(String query) {
         List<String> joinWords = dataReadFromFile("allPossibleWords.txt");
         String refinedQuery = Arrays.stream(query.split("\\s+"))
@@ -59,10 +54,10 @@ public class GenerateQueryToken {
         Matcher matcher = pattern.matcher(query);
         Map<String, String> productMap = new HashMap<>();
         while (matcher.find()) {
-            LOGGER.info("Product Name Found: " + matcher.group());
-            queryProductAttributes.getProductName().add(matcher.group());
+            LOGGER.info("Product Name Found: " + matcher.group().toUpperCase());
             String removeHyphenProductName = matcher.group().replaceAll("\\s*-\\s*", "-");
             String removeSpaceProductName = removeHyphenProductName.replaceAll(" ", "_");
+            queryProductAttributes.getProductName().add(removeSpaceProductName.toUpperCase());
             productMap.put(removeSpaceProductName, matcher.group());
         }
 
@@ -72,7 +67,6 @@ public class GenerateQueryToken {
             String actualProductName = entry.getValue();
             modifiedQuery = modifiedQuery == null ? query : modifiedQuery;
             modifiedQuery = modifiedQuery.replace(actualProductName, modifiedProductName);
-
         }
         LOGGER.info("QueryPostModifiedProductName: " + modifiedQuery);
         return modifiedQuery != null ? modifiedQuery : query;

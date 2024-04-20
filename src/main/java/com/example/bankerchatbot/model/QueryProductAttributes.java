@@ -26,5 +26,8 @@ public class QueryProductAttributes {
     private Set<String> convertProductNameForSearch = null;
     private Set<String> convertPlanType = null;
 
+    private Set<String> unMatchedProductName = null;
+    private Set<String> unMatchedNumber = null;
+
     private ProductAndPlan productAndPlan;
 }
