@@ -10,6 +10,7 @@
 "compare plan_use 567583 of product_type 34534 and 345", compare_products
 "compare plan 567583 of product 34534 and 345", compare_products
 "365 versus 665", compare_products
+"difference between UAT - product - 5168-NPSL1 ALT GO P +11.45/4545 and 456", compare_products
 "UAT - product - 5168-NPSL1 ALT GO P +11.45/4545 versus 456", compare_products
 "compare plan 567583 and 86855 of product 34534 and 345", compare_products
 "compare product 34534 and 345 of plan 567583", compare_products
@@ -60,6 +61,7 @@
 "I'm looking for interest plan options." , display_products
 "Tell me about the fees associated with product." , display_products
 "Show me the all products." , display_products
+"Show me products." , display_products
 "What are the available plans?" , display_plans
 "Show me the different plan offered." , display_plans
 "share information of plan" ,display_plans

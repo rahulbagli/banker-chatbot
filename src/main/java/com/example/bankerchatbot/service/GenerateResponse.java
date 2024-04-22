@@ -128,7 +128,11 @@ public class GenerateResponse implements Constants {
 
     private ProductList fetchProductDetails(QueryProductAttributes queryProducts) {
 
-        queryProducts.getConvertProductNameForSearch().addAll(queryProducts.getConvertProductNumberForSearch());
+        if(queryProducts.getConvertProductNumberForSearch()!= null){
+            queryProducts.getConvertProductNameForSearch().addAll(queryProducts.getConvertProductNumberForSearch());
+            queryProducts.getConvertProductNumberForSearch().removeAll(queryProducts.getConvertProductNumberForSearch());
+        }
+
         queryProducts.getConvertPlanNameForSearch().addAll(queryProducts.getConvertPlanNumberForSearch());
         Map<String, List<Map<String, Object>>> productsMap = parseProductMap();
 
