@@ -54,7 +54,7 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         String queryPostStopWords = generateQueryToken.stopWords(queryPostSpecialCharacter);
         String queryPostModifiedProductName = generateQueryToken.modifyProductName(queryPostStopWords, queryProductAttributes);
         String classIntent = queryClassifier.fetchQueryIntent(queryPostModifiedProductName);
-        LOGGER.info("Class Intent "+classIntent);
+        LOGGER.info("Class Intent " + classIntent);
 
         QueryResponse queryResponse = new QueryResponse();
         queryResponse.setQueryIntent(classIntent);
@@ -67,20 +67,33 @@ public class BankerQueryServiceImpl implements BankerQueryService {
     private void processQueryWithClassIntent(String classIntent, ProductAndPlan productAndPlan,
                                              QueryResponse queryResponse, String queryPostModifiedProductName,
                                              QueryProductAttributes queryProductAttributes) {
-        switch (classIntent){
+        switch (classIntent) {
             case "compare_products":
             case "product_details":
                 extractionLogic(bankerConfig.getPipeline(), queryPostModifiedProductName, queryResponse,
-                    productAndPlan, queryProductAttributes);
-            break;
-            case "display_products": displayProducts(productAndPlan, queryResponse);
-            break;
-            case "display_plans": displayPlans(productAndPlan, queryResponse);
-            break;
-            case "display_plantypes": displayPlanTypes(productAndPlan, queryResponse);
-            break;
-            case "?": noIntentMatched(queryResponse);
-            break;
+                        productAndPlan, queryProductAttributes);
+                break;
+            case "display_products":
+                displayProducts(productAndPlan, queryResponse);
+                break;
+            case "display_plans":
+                displayPlans(productAndPlan, queryResponse);
+                break;
+            case "display_plantypes":
+                displayPlanTypes(productAndPlan, queryResponse);
+                break;
+            case "count_products":
+                countProducts(productAndPlan, queryResponse);
+                break;
+            case "count_plantypes":
+                countPlanTypes(productAndPlan, queryResponse);
+                break;
+            case "count_plans":
+                countPlans(productAndPlan, queryResponse);
+                break;
+            case "?":
+                noIntentMatched(queryResponse);
+                break;
         }
     }
 
@@ -106,27 +119,64 @@ public class BankerQueryServiceImpl implements BankerQueryService {
 
     private void extractIncomingEdgeAndSetAttribute(SemanticGraphEdge dependency) {
         String relation = dependency.getRelation().toString();
-        switch (relation){
+        switch (relation) {
 
-            case "nn": dependencyParsing.parseNNDependency(dependency); break;
-            case "num": dependencyParsing.parseNumDependency(dependency); break;
-            case "cc": dependencyParsing.parseCCDependency(dependency); break;
-            case "iobj": dependencyParsing.parseIObjDependency(dependency); break;
-            case "dobj": dependencyParsing.parseDObjDependency(dependency); break;
-            case "conj_and": dependencyParsing.parseConjAndDependency(dependency); break;
-            case "conj_versus": dependencyParsing.parseConjVersusDependency(dependency); break;
-            case "prep_of": dependencyParsing.parsePrepOfDependency(dependency); break;
-            case "prep_versus": dependencyParsing.parsePrepVersusDependency(dependency); break;
-            case "nsubj": dependencyParsing.parseNSubDependency(dependency); break;
-            case "prep_with": dependencyParsing.parsePrepWithDependency(dependency); break;
-            case "amod": dependencyParsing.parseAmodDependency(dependency); break;
-            case "det": dependencyParsing.parseDetDependency(dependency); break;
-            case "cop": dependencyParsing.parseCOPDependency(dependency); break;
-            case "number": dependencyParsing.parseNumberDependency(dependency); break;
-            case "quantmod": dependencyParsing.parseQuantModDependency(dependency); break;
-            case "prep_for": dependencyParsing.parsePrepForDependency(dependency); break;
-            case "vmod": dependencyParsing.parseVmodDependency(dependency); break;
-            default : dependencyParsing.notFoundDependency();
+            case "nn":
+                dependencyParsing.parseNNDependency(dependency);
+                break;
+            case "num":
+                dependencyParsing.parseNumDependency(dependency);
+                break;
+            case "cc":
+                dependencyParsing.parseCCDependency(dependency);
+                break;
+            case "iobj":
+                dependencyParsing.parseIObjDependency(dependency);
+                break;
+            case "dobj":
+                dependencyParsing.parseDObjDependency(dependency);
+                break;
+            case "conj_and":
+                dependencyParsing.parseConjAndDependency(dependency);
+                break;
+            case "conj_versus":
+                dependencyParsing.parseConjVersusDependency(dependency);
+                break;
+            case "prep_of":
+                dependencyParsing.parsePrepOfDependency(dependency);
+                break;
+            case "prep_versus":
+                dependencyParsing.parsePrepVersusDependency(dependency);
+                break;
+            case "nsubj":
+                dependencyParsing.parseNSubDependency(dependency);
+                break;
+            case "prep_with":
+                dependencyParsing.parsePrepWithDependency(dependency);
+                break;
+            case "amod":
+                dependencyParsing.parseAmodDependency(dependency);
+                break;
+            case "det":
+                dependencyParsing.parseDetDependency(dependency);
+                break;
+            case "cop":
+                dependencyParsing.parseCOPDependency(dependency);
+                break;
+            case "number":
+                dependencyParsing.parseNumberDependency(dependency);
+                break;
+            case "quantmod":
+                dependencyParsing.parseQuantModDependency(dependency);
+                break;
+            case "prep_for":
+                dependencyParsing.parsePrepForDependency(dependency);
+                break;
+            case "vmod":
+                dependencyParsing.parseVmodDependency(dependency);
+                break;
+            default:
+                dependencyParsing.notFoundDependency();
         }
     }
 
@@ -155,5 +205,23 @@ public class BankerQueryServiceImpl implements BankerQueryService {
         queryResponse.setQueryIntent("Display_Products");
         queryResponse.setProductName(productAndPlan.getProductName());
         queryResponse.setResponseText("Okay! Showing products of your query");
+    }
+
+    private void countPlans(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Count_Plans");
+        queryResponse.setResponseText("Okay! Found total number of Plans: "+productAndPlan.getPlanName().size());
+    }
+
+    private void countPlanTypes(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Count_PlanTypes");
+        queryResponse.setResponseText("Sure! Total count of Plan Types is : " + productAndPlan.getPlanTypes().size());
+    }
+
+    private void countProducts(ProductAndPlan productAndPlan, QueryResponse queryResponse) {
+        queryResponse.setResponseCode(HttpServletResponse.SC_OK);
+        queryResponse.setQueryIntent("Count_Products");
+        queryResponse.setResponseText("Certainly! Total Product Number : "+productAndPlan.getProductName().size());
     }
 }

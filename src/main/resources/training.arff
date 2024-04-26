@@ -1,7 +1,7 @@
 @relation chatbot_data
 
 @attribute user_input string
-@attribute intent {compare_products, product_details, display_products, display_plans, display_plantypes, ?}
+@attribute intent {compare_products, product_details, display_products, display_plans, display_plantypes,count_products,count_plantypes,count_plans ?}
 
 @data
 "compare interest and faes product type of of UAT - product - 5168 - NPSL1 ALT GO P +11.45/45.45 versus 6120 of plan 0184" , compare_products
@@ -77,3 +77,18 @@
 "provide information of plan types" , display_plantypes
 "provide details of plan types", display_plantypes
 "Could you show details about plan types", display_plantypes
+"how many products available", "count_products"
+"total number of products", "count_products"
+"count products", "count_products"
+"can you count products", "count_products"
+"count total number of products", "count_products"
+"how many plan types available", "count_plantypes"
+"total number of plan types", "count_plantypes"
+"count plan types", "count_plantypes"
+"can you plan types", "count_plantypes"
+"count total number of plan types", "count_plantypes"
+"how many plans available", "count_plans"
+"total number of plans", "count_plans"
+"count plans", "count_plans"
+"can you count plans", "count_plans"
+"count total number of plans", "count_plans"
